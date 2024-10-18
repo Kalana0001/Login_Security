@@ -20,7 +20,6 @@ const SignUp = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate(); 
 
-
   const handleChange = (e) => {
     setValues({
       ...values,
@@ -28,27 +27,44 @@ const SignUp = () => {
     });
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-   
     const validationErrors = validateForm(values);
     setErrors(validationErrors);
 
-    
-    if (!validationErrors.name && !validationErrors.email && !validationErrors.password) {
+    // Ensure all fields are valid
+    if (!validationErrors.name && !validationErrors.email && !validationErrors.password && !validationErrors.confirmPassword) {
       try {
         const response = await axios.post('http://localhost:8087/signup', values);
+        
         if (response.status === 200) {
+          const { token } = response.data; // Assume the token is returned in response.data
+          
+          // Store the token in localStorage (or sessionStorage)
+          localStorage.setItem('token', token);
+
           toast.success('Signup successful!');
+          // Clear form values after successful signup
+          setValues({
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+          });
           navigate('/signin');
         } else {
           setErrors({ general: 'Signup failed. Please try again.' });
         }
       } catch (error) {
         console.error('Error:', error);
-        setErrors({ general: 'An error occurred. Please try again later.' });
+        if (error.response && error.response.status === 400) {
+          setErrors({ general: 'Invalid input data.' });
+        } else if (error.response && error.response.status === 409) {
+          setErrors({ general: 'Email already exists.' });
+        } else {
+          setErrors({ general: 'An error occurred. Please try again later.' });
+        }
         toast.error('An error occurred. Please try again later.');
       }
     }
@@ -144,6 +160,7 @@ const SignUp = () => {
           </form>
         </div>
       </div>
+      <ToastContainer /> {/* Ensure ToastContainer is included */}
     </div>
   );
 };

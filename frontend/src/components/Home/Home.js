@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import './Home.css';
 
 function Home() {
@@ -14,35 +15,55 @@ function Home() {
     name: '',
   });
 
+  const navigate = useNavigate(); // Initialize useNavigate hook for navigation
+
   useEffect(() => {
     // Fetch user data from the API
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:8087/users'); // Adjust URL as needed
+        const token = localStorage.getItem('token'); // Get the JWT from local storage
+
+        if (!token) {
+          console.error('No token found, user is not authenticated.');
+          navigate('/signin'); // Redirect to sign-in if no token is found
+          return; // Exit if there is no token
+        }
+
+        const response = await fetch('http://localhost:8087/users', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the request headers
+            'Content-Type': 'application/json', // Set content type to JSON
+          },
+        });
+
+        if (!response.ok) {
+          console.error(`HTTP error! status: ${response.status}, statusText: ${response.statusText}`);
+          throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+        }
+
         const data = await response.json();
 
-        // Assuming you want the first user in the returned array
-        if (data.length > 0) {
-          setUserInfo({
-            id: data[0].id, // Adjust based on your DB structure
-            email: data[0].email,
-            name: data[0].name,
-          });
+        // Set userInfo and formData with fetched user data
+        setUserInfo({
+          id: data.id, // Directly use the user's data
+          email: data.email,
+          name: data.name,
+        });
 
-          // Set form data with fetched user data
-          setFormData({
-            fullName: data[0].name, // Assuming name is in your DB
-            email: data[0].email || '', // Adjust based on your DB structure
-            profilePicture: null, // Start with no profile picture
-          });
-        }
+        // Set form data with fetched user data
+        setFormData({
+          fullName: data.name || '', // Assuming name is in your DB
+          email: data.email || '', // Adjust based on your DB structure
+          profilePicture: null, // Start with no profile picture
+        });
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching user data:', error.message); // More detailed error logging
       }
     };
 
     fetchUserData();
-  }, []); // Empty dependency array means this effect runs once when the component mounts
+  }, [navigate]); // Include navigate in the dependency array
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,6 +77,14 @@ function Home() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Form Data:', formData);
+    // Here, you would typically make an API call to update the user information.
+  };
+
+  const handleLogout = () => {
+    // Clear the token from local storage
+    localStorage.removeItem('token');
+    console.log('User logged out'); // Log the logout action
+    navigate('/'); // Redirect to the login page or desired route
   };
 
   return (
@@ -75,7 +104,7 @@ function Home() {
             <p className='user_data'>Email: {userInfo.email}</p>
           </div>
           <div className="buttons">
-            <button className="logout-btn">Logout</button>
+            <button className="logout-btn" onClick={handleLogout}>Logout</button>
           </div>
         </div>
 
@@ -93,8 +122,8 @@ function Home() {
             
             <label>Email</label>
             <input 
-              type="text" 
-              name="Email" 
+              type="text"
+              name="email"
               className='home_input' 
               value={formData.email} 
               onChange={handleChange} 

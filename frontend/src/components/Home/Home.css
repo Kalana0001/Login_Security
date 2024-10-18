@@ -1,4 +1,3 @@
-/* Home container styling */
 .home {
   background-image: linear-gradient(to right, #3286be, #29a5b6, #326fbe);
   height: 100vh; 
@@ -7,7 +6,6 @@
   background-position: center;
 }
 
-/* Container for profile card and form */
 .app-container {
   display: flex;
   justify-content: space-between;
@@ -17,7 +15,7 @@
   gap: 20px;
 }
 
-/* Profile card styling */
+
 .profile-card {
   text-align: center;
   border: 1px solid #ddd;
@@ -30,14 +28,13 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Profile image styling */
+
 .profile-image img {
   border-radius: 50%;
   width: 150px;
   height: 150px;
 }
 
-/* Buttons */
 .buttons {
   margin-top: 20px;
 }
@@ -56,7 +53,6 @@
   background-color: #dc3545;
 }
 
-/* Edit profile form styling */
 .edit-profile-form {
   padding: 20px;
   border-radius: 10px;
@@ -132,7 +128,7 @@ label {
   color: #555;
 }
 
-/* Media query for responsive layout */
+
 @media (max-width: 768px) {
   .app-container {
       flex-direction: column;
@@ -140,7 +136,7 @@ label {
   }
 
   .profile-card, .edit-profile-form {
-      width: 100%; /* Make cards take full width on smaller screens */
+      width: 100%; 
       max-width: 500px;
   }
 }

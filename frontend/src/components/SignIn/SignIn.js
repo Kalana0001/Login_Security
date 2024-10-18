@@ -25,28 +25,27 @@ const SignIn = () => {
         });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        
 
         const validationErrors = Validation(values);
         setErrors(validationErrors);
 
-
         if (validationErrors.email === "" && validationErrors.password === "") {
-            axios.post('http://localhost:8087/signin', values) 
-                .then(res => {
-                    if (res.data === "Success") {
-                        toast.success('Login successful!'); 
-                        navigate('/home'); 
-                    } else {
-                        alert("No records existed"); 
-                    }
-                })
-                .catch(err => {
-                    console.error('Error:', err); 
-                    alert("An error occurred. Please try again.");
-                });
+            try {
+                const res = await axios.post('http://localhost:8087/signin', values); 
+
+                if (res.data.token) { // Check if token is present in response
+                    localStorage.setItem('token', res.data.token); // Store the JWT token in local storage
+                    toast.success('Login successful!'); 
+                    navigate('/home'); 
+                } else {
+                    toast.error("No records existed"); 
+                }
+            } catch (err) {
+                console.error('Error:', err); 
+                toast.error("An error occurred. Please try again.");
+            }
         }
     };
 
@@ -103,6 +102,7 @@ const SignIn = () => {
                     </form>
                 </div>
             </div>
+            <ToastContainer /> {/* Include ToastContainer for notifications */}
         </div>
     );
 };

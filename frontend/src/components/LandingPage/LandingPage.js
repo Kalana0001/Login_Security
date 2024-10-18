@@ -11,7 +11,7 @@ const LandingPage = () => {
         <div className="nav__header">
           <div className="nav__logo">
             <a href="#">
-              pl<span><i className="fa fa-play"></i></span>y
+              Kal<span><i className="fa fa-play">a</i></span>na
             </a>
           </div>
           <div className="nav__menu__btn" id="menu-btn">
@@ -32,7 +32,7 @@ const LandingPage = () => {
           <h2> Higher National Diploma in Software Engineering (HNDSE)-23.2F</h2>
           <h1>SECURE WRAPPER APPLICATION </h1>
           <p className='lpara'>
-            <b>CourseModule-SoftwareSecurity</b>
+            <b>Course Module-Software Security</b>
           </p>
           <p className='lpara'>
             <b>Student Number-GAHDSE23.3F-014</b>
