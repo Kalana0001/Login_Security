@@ -17,7 +17,7 @@ function App() {
         <ToastContainer position="top-center" style={{marginTop: "70px"}}/>
             <main>
               <Routes>
-              <Route path='/' element={<LandingPage/>}/>
+                <Route path='/' element={<LandingPage/>}/>
                 <Route path='/signup' element={<SignUp/>}/>
                 <Route path="/signin" element={<SignIn/>}/>
                 <Route path="/home" element={<Home/>}/>

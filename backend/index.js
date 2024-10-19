@@ -2,18 +2,17 @@ const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const bcrypt = require("bcrypt");  // For password hashing
-const jwt = require("jsonwebtoken");  // For JWT authentication
-require('dotenv').config();  // For environment variables
-
+const bcrypt = require("bcrypt");  
+const jwt = require("jsonwebtoken");  
+require('dotenv').config();  
 const app = express();
 app.use(cors({
-    origin: 'http://localhost:3000', // Change to your frontend's URL
+    origin: 'http://localhost:3000', 
 }));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Database connection
+
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -21,7 +20,7 @@ const db = mysql.createConnection({
     database: "login_security"
 });
 
-// Secret key for JWT
+
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 
 // Middleware to authenticate JWT
@@ -48,7 +47,7 @@ function logAction(userId, action) {
     });
 }
 
-// Customer Sign Up
+
 app.post("/signup", async (req, res) => {
     const { name, email, password } = req.body;
     const sql = "INSERT INTO signs (name, email, password) VALUES (?)";
@@ -69,7 +68,7 @@ app.post("/signup", async (req, res) => {
     }
 });
 
-// Customer Sign In
+
 app.post("/signin", (req, res) => {
     const { email, password } = req.body;
     const sql = "SELECT * FROM signs WHERE email = ?";
@@ -89,9 +88,8 @@ app.post("/signin", (req, res) => {
             }
             
             // Generate JWT
-            const token = jwt.sign({ id: user.id, name: user.name }, JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ id: user.id, name: user.name }, JWT_SECRET, { expiresIn: '1m' });
             
-            // Log successful login action
             logAction(user.id, "Signed in");
             
             res.json({ message: "Success", token });
@@ -101,7 +99,7 @@ app.post("/signin", (req, res) => {
     });
 });
 
-// Get User Data (Authenticated route)
+
 app.get("/users", authenticateToken, (req, res) => {
     // Change the SQL query to fetch only the authenticated user's data
     const sql = "SELECT * FROM signs WHERE id = ?";

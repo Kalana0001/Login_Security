@@ -102,7 +102,6 @@ const SignIn = () => {
                     </form>
                 </div>
             </div>
-            <ToastContainer /> {/* Include ToastContainer for notifications */}
         </div>
     );
 };

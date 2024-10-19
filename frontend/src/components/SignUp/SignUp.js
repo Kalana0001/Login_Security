@@ -33,7 +33,7 @@ const SignUp = () => {
     const validationErrors = validateForm(values);
     setErrors(validationErrors);
 
-    // Ensure all fields are valid
+  
     if (!validationErrors.name && !validationErrors.email && !validationErrors.password && !validationErrors.confirmPassword) {
       try {
         const response = await axios.post('http://localhost:8087/signup', values);
@@ -43,9 +43,8 @@ const SignUp = () => {
           
           // Store the token in localStorage (or sessionStorage)
           localStorage.setItem('token', token);
-
           toast.success('Signup successful!');
-          // Clear form values after successful signup
+          
           setValues({
             name: '',
             email: '',
@@ -160,7 +159,6 @@ const SignUp = () => {
           </form>
         </div>
       </div>
-      <ToastContainer /> {/* Ensure ToastContainer is included */}
     </div>
   );
 };
