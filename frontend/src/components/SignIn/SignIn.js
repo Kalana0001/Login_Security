@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SignIn.css';
 import background from '../../assets/bg.svg';
 import avatar from '../../assets/avatar.svg';
@@ -13,16 +13,44 @@ const SignIn = () => {
     const [values, setValues] = useState({
         email: '',
         password: '',
+        userType: '' // State for user type
     });
 
     const [errors, setErrors] = useState({});
     const navigate = useNavigate(); 
 
+    // Fetch user type based on email input
+    const fetchUserType = async (email) => {
+        try {
+            const res = await axios.get(`http://localhost:8087/getUserType?email=${email}`);
+            if (res.data.userType) {
+                setValues((prevValues) => ({
+                    ...prevValues,
+                    userType: res.data.userType
+                }));
+            } else {
+                setValues((prevValues) => ({
+                    ...prevValues,
+                    userType: ''
+                }));
+            }
+        } catch (error) {
+            console.error('Error fetching user type:', error);
+            toast.error("Failed to fetch user type.");
+        }
+    };
+
     const handleChange = (e) => {
+        const { name, value } = e.target;
         setValues({
             ...values,
-            [e.target.name]: e.target.value,
+            [name]: value,
         });
+
+        // Fetch user type when email changes
+        if (name === 'email') {
+            fetchUserType(value);
+        }
     };
 
     const handleSubmit = async (event) => {
@@ -37,8 +65,16 @@ const SignIn = () => {
 
                 if (res.data.token) { // Check if token is present in response
                     localStorage.setItem('token', res.data.token); // Store the JWT token in local storage
-                    toast.success('Login successful!'); 
-                    navigate('/home'); 
+                    toast.success('Login successful!');
+
+                    // Navigate based on user type
+                    if (values.userType === 'admin') {
+                        navigate('/adminhome'); // Navigate to admin home
+                    } else if (values.userType === 'user') {
+                        navigate('/home'); // Navigate to user home
+                    } else {
+                        toast.error("Invalid user type.");
+                    }
                 } else {
                     toast.error("No records existed"); 
                 }
@@ -96,12 +132,34 @@ const SignIn = () => {
                             </div>
                         </div>
 
+                        {/* User Type Dropdown */}
+                        <div className="input-div user-type">
+                            <div className="i">
+                                <i className="fas fa-user-circle"></i>
+                            </div>
+                            <div className="div">
+                                <select 
+                                    name="userType"
+                                    className="input" 
+                                    value={values.userType}
+                                    onChange={handleChange} 
+                                >
+                                    <option value="">Select User Type</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="user">User</option>
+                                    {/* Add other user types if needed */}
+                                </select>
+                                {errors.userType && <span className="error-message">{errors.userType}</span>} {/* Display user type error */}
+                            </div>
+                        </div>
+
                         <input type="submit" className="btn" value="Sign In" />
                         <a href='/signup' className="abtn">SIGN UP</a>
                         <p>Don't Have An Account?</p>
                     </form>
                 </div>
             </div>
+            <ToastContainer /> {/* Add ToastContainer for notifications */}
         </div>
     );
 };

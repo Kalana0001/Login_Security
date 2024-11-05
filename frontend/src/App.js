@@ -7,6 +7,9 @@ import Home from './components/Home/Home';
 import LandingPage from './components/LandingPage/LandingPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AdminHome from './components/AdminHome/AdminHome';
+import UserActivities from './components/UserActivities/UserActivities';
+import ManageUsers from './components/ManageUsers/ManageUsers';
 
 
 
@@ -21,6 +24,9 @@ function App() {
                 <Route path='/signup' element={<SignUp/>}/>
                 <Route path="/signin" element={<SignIn/>}/>
                 <Route path="/home" element={<Home/>}/>
+                <Route path="/adminhome" element={<AdminHome/>}/>
+                <Route path="/useractivity" element={<UserActivities/>}/>
+                <Route path="/usermanage" element={<ManageUsers/>}/>
               </Routes>
             </main>
         </BrowserRouter>

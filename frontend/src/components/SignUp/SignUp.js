@@ -15,6 +15,7 @@ const SignUp = () => {
     email: '',
     password: '',
     confirmPassword: '',
+    userType: 'user', // Default value
   });
   
   const [errors, setErrors] = useState({});
@@ -33,7 +34,6 @@ const SignUp = () => {
     const validationErrors = validateForm(values);
     setErrors(validationErrors);
 
-  
     if (!validationErrors.name && !validationErrors.email && !validationErrors.password && !validationErrors.confirmPassword) {
       try {
         const response = await axios.post('http://localhost:8087/signup', values);
@@ -50,6 +50,7 @@ const SignUp = () => {
             email: '',
             password: '',
             confirmPassword: '',
+            userType: 'user', // Reset to default value
           });
           navigate('/signin');
         } else {
@@ -70,7 +71,7 @@ const SignUp = () => {
   };
 
   return (
-    <div>
+    <div className="signup-page">
       <img className="wave" src={wave} alt="wave" />
       <div className="container">
         <div className="img">
@@ -152,6 +153,24 @@ const SignUp = () => {
               </div>
             </div>
 
+            {/* Dropdown for user type */}
+            <div className="input-div user-type">
+              <div className="i">
+                <i className="fas fa-user-circle"></i>
+              </div>
+              <div className="div">
+                <select 
+                  className="input" 
+                  name="userType"
+                  value={values.userType}
+                  onChange={handleChange}
+                >
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+            </div>
+
             <a href="#">Forgot Password?</a>
             <input type="submit" className="btn" value="Sign Up" />
             <a href='/signin' className="abtn">SIGN IN</a>
@@ -159,6 +178,7 @@ const SignUp = () => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

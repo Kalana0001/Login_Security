@@ -4,6 +4,7 @@
   width: 100vw;  
   background-size: cover; 
   background-position: center;
+  overflow-y: auto;
 }
 
 .app-container {
@@ -51,6 +52,7 @@
 
 .logout-btn {
   background-color: #dc3545;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8); 
 }
 
 .edit-profile-form {
@@ -105,6 +107,8 @@ label {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8); 
+  background-image: linear-gradient(to right, #54c1f3, #2268e9, #0967e2);
 }
 
 .home-btn {
@@ -139,4 +143,22 @@ label {
       width: 100%; 
       max-width: 500px;
   }
+}
+
+.admin-welcome {
+  background-image: linear-gradient(to right, #3286be, #29a5b6, #326fbe);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8); 
+  color: #131212; 
+  font-size: 24px; 
+  font-weight: bold;
+  padding: 20px; 
+  border-radius: 8px; 
+  text-align: center; 
+  margin: 20px; 
+  transition: transform 0.3s, box-shadow 0.3s; 
+}
+
+.admin-welcome:hover {
+  transform: translateY(-5px); 
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); 
 }

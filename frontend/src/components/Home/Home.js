@@ -87,20 +87,34 @@ function Home() {
     console.log('Form Data:', formData);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     const confirmLogout = window.confirm("Are you sure you want to logout?");
     
     if (confirmLogout) {
-      localStorage.removeItem('token');
-      console.log('User logged out');
-      navigate('/'); 
+        const token = localStorage.getItem('token');
+        try {
+            await fetch("http://localhost:8087/logout", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+            });
+            localStorage.removeItem('token');  // Remove token from local storage
+            console.log('User logged out');     // Logs logout action in console
+            navigate('/');                      // Navigate to home page
+        } catch (error) {
+            console.error("Logout failed:", error); // Log error if logout fails
+        }
     } else {
-      console.log('Logout canceled');
+        console.log('Logout canceled');          // Logs cancel action in console
     }
-  };
+};
+
 
   return (
     <div className='home'>
+      <p className="admin-welcome">{userInfo.name}, Welcome to  Home!</p>
       <div className="app-container">
         <div className="profile-card">
           <div className="profile-image">

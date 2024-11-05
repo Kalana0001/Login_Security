@@ -9,6 +9,11 @@ body{
     overflow: hidden;
 }
 
+.signup-page{
+	overflow-y: auto;
+	height: 100vh;  
+}
+
 .wave{
 	position: fixed;
 	bottom: 0;
@@ -19,7 +24,7 @@ body{
 
 .container{
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap :7rem;
@@ -248,3 +253,15 @@ a{
 	margin-top: 55px;
 	color: red;
 }
+  
+  .input-div.user-type {
+	margin-bottom: 20px; 
+  }
+  
+  .input-div select {
+	width: 100%; 
+	padding: 10px; 
+	border: 1px solid #ccc;
+	border-radius: 5px; 
+  }
+  
